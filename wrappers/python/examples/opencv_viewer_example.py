@@ -12,11 +12,14 @@ import cv2
 # Configure depth and color streams
 pipeline = rs.pipeline()
 config = rs.config()
-config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
-config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+config.enable_stream(rs.stream.depth, -1, 640, 480, rs.format.z16, 30)
+config.enable_stream(rs.stream.color, -1, 1920, 1080, rs.format.bgr8, 6)
 
+profile = config.resolve(pipeline) # does not start streaming
 # Start streaming
-pipeline.start(config)
+profile = pipeline.start(config)
+
+print profile.get_streams()
 
 try:
     while True:
@@ -29,18 +32,18 @@ try:
             continue
 
         # Convert images to numpy arrays
-        depth_image = np.asanyarray(depth_frame.get_data())
+        #depth_image = np.asanyarray(depth_frame.get_data())
         color_image = np.asanyarray(color_frame.get_data())
 
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
+        #depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
 
         # Stack both images horizontally
-        images = np.hstack((color_image, depth_colormap))
+        #images = np.hstack((color_image, depth_colormap))
 
         # Show images
         cv2.namedWindow('RealSense', cv2.WINDOW_AUTOSIZE)
-        cv2.imshow('RealSense', images)
+        cv2.imshow('RealSense', color_image)
         cv2.waitKey(1)
 
 finally:
