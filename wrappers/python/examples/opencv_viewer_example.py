@@ -9,6 +9,7 @@ import pyrealsense2 as rs
 import numpy as np
 import cv2
 import argparse
+import pickle
 
 parser = argparse.ArgumentParser(description='Process the amount of the devices.')
 parser.add_argument('-a', '--amount', type=int,help='the amount for the device', default = 1)
@@ -127,6 +128,11 @@ try:
                 print('R', R)
                 print('T', T)
         cv2.destroyAllWindows()
+        with open('calibResult', 'wb') as fp:
+                pickle.dump(args.amount,fp)
+                pickle.dump(mtxs, fp)
+                pickle.dump(R, fp)
+                pickle.dump(T, fp)
 
 finally:
     # Stop streaming
