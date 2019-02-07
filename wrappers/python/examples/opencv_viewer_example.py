@@ -131,8 +131,9 @@ try:
         with open('calibResult', 'wb') as fp:
                 pickle.dump(args.amount,fp)
                 pickle.dump(mtxs, fp)
-                pickle.dump(R, fp)
-                pickle.dump(T, fp)
+                if args.amount == 2:
+                        pickle.dump(R, fp)
+                        pickle.dump(T, fp)
 
 finally:
     # Stop streaming
